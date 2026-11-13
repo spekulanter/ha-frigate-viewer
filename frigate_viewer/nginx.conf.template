@@ -16,6 +16,12 @@ http {
         ''      close;
     }
 
+    # Pages are fetched uncompressed so the guard script can be added to them.
+    map $http_accept $upstream_accept_encoding {
+        default      $http_accept_encoding;
+        ~text/html   "";
+    }
+
     resolver __RESOLVER__ valid=30s ipv6=off;
 
     server {
@@ -39,6 +45,7 @@ http {
         proxy_set_header Upgrade $http_upgrade;
         proxy_set_header Connection $connection_upgrade;
         proxy_set_header X-Ingress-Path $http_x_ingress_path;
+        proxy_set_header Accept-Encoding $upstream_accept_encoding;
 
         # The browser never supplies its own Frigate identity.
         proxy_set_header Authorization "";
@@ -53,19 +60,29 @@ http {
         include /tmp/frigate_auth.conf;
 
         # Second line of defence behind Frigate's viewer role.
-        location ~* ^/api/(login|logout|users|restart)(/|$) {
+        location ~* ^/api/(login|users|restart|logs)(/|$) {
             return 403;
         }
         location ~* ^/api/config/(?!schema\.json$) {
             return 403;
         }
-        location ~* ^/(config|settings)(/|$) {
+        location ~* ^/(config|settings|login|api/logout)(/|$) {
             return 302 $http_x_ingress_path/;
+        }
+
+        location = /__viewer_guard.js {
+            default_type application/javascript;
+            add_header Cache-Control "no-cache";
+            alias /etc/frigate-viewer/guard.js;
         }
 
         location / {
             set $frigate_upstream "__SERVER__";
             proxy_pass $frigate_upstream;
+
+            # Keeps Settings and Config out of reach inside the UI as well.
+            sub_filter '</head>' '<script src="$http_x_ingress_path/__viewer_guard.js"></script></head>';
+            sub_filter_once on;
         }
     }
 }
