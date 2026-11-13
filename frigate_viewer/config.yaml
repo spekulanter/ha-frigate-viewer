@@ -1,5 +1,5 @@
 name: Frigate Viewer Proxy
-version: "0.1.5"
+version: "0.1.6"
 slug: frigate_viewer
 description: The original Frigate UI inside Home Assistant, signed in as a read-only viewer
 url: https://github.com/spekulanter/ha-frigate-viewer
