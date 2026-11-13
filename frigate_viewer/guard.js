@@ -5,13 +5,14 @@
  * viewer role plus the request blocks in nginx.
  */
 (function () {
-  var base = (window.baseUrl || "/").replace(/\/+$/, "") + "/";
   var blocked = /^(settings|config)(\/|$)/;
   // Where the UI was opened, e.g. the review page of one camera.
   var home = location.href;
 
   function isBlocked(url) {
     try {
+      // Read on every check: Frigate sets window.baseUrl after this script loads.
+      var base = (window.baseUrl || "/").replace(/\/+$/, "") + "/";
       var path = new URL(url, location.href).pathname;
       if (path.indexOf(base) !== 0) return false;
       return blocked.test(path.slice(base.length));
