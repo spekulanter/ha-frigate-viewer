@@ -1,0 +1,25 @@
+name: Frigate Viewer Proxy
+version: "0.1.0"
+slug: frigate_viewer
+description: The original Frigate UI inside Home Assistant, signed in as a read-only viewer
+url: https://github.com/spekulanter/ha-frigate-viewer
+arch:
+  - amd64
+  - aarch64
+init: false
+startup: application
+boot: auto
+ingress: true
+ingress_port: 8099
+panel_icon: mdi:cctv
+panel_title: Frigate
+panel_admin: false
+options:
+  server: "https://frigate.local:8971"
+  username: null
+  password: null
+schema:
+  server: url
+  username: str
+  password: password
+  cookie_name: str?
