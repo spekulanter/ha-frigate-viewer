@@ -7,6 +7,8 @@
 (function () {
   var base = (window.baseUrl || "/").replace(/\/+$/, "") + "/";
   var blocked = /^(settings|config)(\/|$)/;
+  // Where the UI was opened, e.g. the review page of one camera.
+  var home = location.href;
 
   function isBlocked(url) {
     try {
@@ -22,21 +24,13 @@
     var original = history[name];
     history[name] = function (state, title, url) {
       var result = original.apply(this, arguments);
-      if (url != null && isBlocked(url)) {
-        if (name === "pushState") {
-          setTimeout(function () {
-            history.back();
-          }, 0);
-        } else {
-          location.replace(base);
-        }
-      }
+      if (url != null && isBlocked(url)) location.replace(home);
       return result;
     };
   });
 
   window.addEventListener("popstate", function () {
-    if (isBlocked(location.href)) location.replace(base);
+    if (isBlocked(location.href)) location.replace(home);
   });
 
   var style = document.createElement("style");
