@@ -1,0 +1,71 @@
+worker_processes 1;
+pid /tmp/nginx.pid;
+error_log /dev/stderr warn;
+
+events {
+    worker_connections 512;
+}
+
+http {
+    access_log off;
+    server_tokens off;
+    default_type application/octet-stream;
+
+    map $http_upgrade $connection_upgrade {
+        default upgrade;
+        ''      close;
+    }
+
+    resolver __RESOLVER__ valid=30s ipv6=off;
+
+    server {
+        listen 8099 default_server;
+
+        # Only the Supervisor ingress gateway may connect, so every request
+        # has already passed Home Assistant's own sign-in.
+        allow 172.30.32.2;
+        deny all;
+
+        client_max_body_size 1m;
+
+        proxy_http_version 1.1;
+        proxy_buffering off;
+        proxy_request_buffering off;
+        proxy_read_timeout 3600s;
+        proxy_send_timeout 3600s;
+        proxy_ssl_server_name on;
+        proxy_ssl_verify off;
+
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection $connection_upgrade;
+        proxy_set_header X-Ingress-Path $http_x_ingress_path;
+
+        # The browser never supplies its own Frigate identity.
+        proxy_set_header Authorization "";
+        proxy_set_header X-Proxy-Secret "";
+        proxy_set_header Remote-User "";
+        proxy_set_header Remote-Role "";
+
+        # Frigate's session stays inside this app, never in the browser.
+        proxy_hide_header Set-Cookie;
+
+        # Written by run.sh: the viewer session cookie, or a 503 while signed out.
+        include /tmp/frigate_auth.conf;
+
+        # Second line of defence behind Frigate's viewer role.
+        location ~* ^/api/(login|logout|users|restart)(/|$) {
+            return 403;
+        }
+        location ~* ^/api/config/(?!schema\.json$) {
+            return 403;
+        }
+        location ~* ^/(config|settings)(/|$) {
+            return 302 $http_x_ingress_path/;
+        }
+
+        location / {
+            set $frigate_upstream "__SERVER__";
+            proxy_pass $frigate_upstream;
+        }
+    }
+}
