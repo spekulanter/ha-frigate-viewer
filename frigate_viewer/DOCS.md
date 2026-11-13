@@ -30,8 +30,12 @@ work, the configuration editor and settings do not. On top of that the app
 itself rejects these requests:
 
 - `/api/config/*` except the schema (raw config, save, set)
-- `/api/users`, `/api/login`, `/api/logout`, `/api/restart`
-- the `/config` and `/settings` pages, which redirect to the start page
+- `/api/users`, `/api/login`, `/api/restart`, `/api/logs`
+- the `/config`, `/settings` and `/login` pages and `/api/logout`, which
+  redirect to the start page
+
+A small script added to the UI also hides the Settings entry in Frigate's
+menu and turns back any in-app navigation to Settings or Config.
 
 Only the Supervisor ingress gateway can connect to the app. No port is
 published on the host.
