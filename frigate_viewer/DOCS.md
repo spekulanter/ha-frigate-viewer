@@ -55,6 +55,15 @@ page: review
 `addon` is the app slug, visible in the address bar when the app page is open
 in Home Assistant.
 
+`page` picks where the UI opens:
+
+| `page` | Opens |
+| --- | --- |
+| `review` | Review, filtered to `camera` (last 24 hours) |
+| `explore` | Explore, filtered to `camera` (all dates) |
+| `timeline` | The recording timeline of `camera`, starting 30 seconds ago |
+| `live` | The live view of `camera` |
+
 ## Troubleshooting
 
 The app log says whether sign-in worked and when the session is refreshed.
