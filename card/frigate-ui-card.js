@@ -10,7 +10,7 @@
  *   path: review?cameras=front_door  # optional, overrides page/camera
  *   height: 80vh                     # optional CSS height
  */
-const CARD_VERSION = "0.1.0";
+const CARD_VERSION = "0.1.1";
 const DEFAULT_HEIGHT = "calc(100dvh - var(--header-height, 56px) - 4px)";
 const SESSION_EVENT = "frigate-ui-card-session";
 
@@ -181,9 +181,9 @@ class FrigateUiCard extends HTMLElement {
           background: #0b0b0d;
           overflow: hidden;
         }
-        iframe { display: block; width: 100%; height: 100%; border: 0; }
+        iframe { position: relative; z-index: 1; display: block; width: 100%; height: 100%; border: 0; }
         .msg {
-          position: absolute; inset: 0;
+          position: absolute; inset: 0; z-index: 0; pointer-events: none;
           display: flex; align-items: center; justify-content: center;
           padding: 16px; text-align: center;
           color: #b8bcc4; font: 14px/1.4 system-ui, sans-serif;
