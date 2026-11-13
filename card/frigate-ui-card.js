@@ -6,11 +6,11 @@
  *   type: custom:frigate-ui-card
  *   addon: xxxxxxxx_frigate_viewer   # app slug (or set ingress_entry instead)
  *   camera: front_door               # optional
- *   page: review                     # review | live | explore
+ *   page: review                     # review | live | explore | timeline
  *   path: review?cameras=front_door  # optional, overrides page/camera
  *   height: 80vh                     # optional CSS height
  */
-const CARD_VERSION = "0.1.1";
+const CARD_VERSION = "0.1.2";
 const DEFAULT_HEIGHT = "calc(100dvh - var(--header-height, 56px) - 4px)";
 const SESSION_EVENT = "frigate-ui-card-session";
 
@@ -204,6 +204,8 @@ class FrigateUiCard extends HTMLElement {
     if (config.path) return `${base}/${String(config.path).replace(/^\/+/, "")}`;
     const camera = config.camera ? encodeURIComponent(config.camera) : "";
     if (config.page === "live") return camera ? `${base}/#${camera}` : `${base}/`;
+    // Handled by the app's guard script (app 0.1.4 or later).
+    if (config.page === "timeline" && camera) return `${base}/review?viewer_timeline=${camera}`;
     if (config.page === "explore") return `${base}/explore${camera ? `?cameras=${camera}` : ""}`;
     return `${base}/review${camera ? `?cameras=${camera}` : ""}`;
   }
