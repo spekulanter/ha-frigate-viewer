@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#3563d6"/>
+      <stop offset="1" stop-color="#14245a"/>
+    </linearGradient>
+    <linearGradient id="body" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset="1" stop-color="#dfe7fb"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Tile -->
+  <rect x="8" y="8" width="240" height="240" rx="56" fill="url(#bg)"/>
+  <rect x="8" y="8" width="240" height="240" rx="56" fill="none" stroke="#ffffff" stroke-opacity="0.12" stroke-width="2"/>
+
+  <!-- Wall mount -->
+  <path d="M168 132 L198 156 L198 190" fill="none" stroke="#ffffff" stroke-width="13" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect x="180" y="184" width="38" height="14" rx="5" fill="#ffffff"/>
+
+  <!-- Camera -->
+  <g transform="rotate(20 112 112)">
+    <rect x="58" y="86" width="124" height="52" rx="12" fill="url(#body)"/>
+    <rect x="40" y="90" width="26" height="44" rx="8" fill="#b9c9f3"/>
+    <circle cx="160" cy="112" r="7" fill="#ef4444"/>
+  </g>
+
+  <!-- Viewer badge -->
+  <circle cx="82" cy="182" r="46" fill="#14245a"/>
+  <circle cx="82" cy="182" r="39" fill="#22c55e"/>
+  <path d="M54 182 Q82 156 110 182 Q82 208 54 182 Z" fill="#ffffff"/>
+  <circle cx="82" cy="182" r="11" fill="#15803d"/>
+  <circle cx="86" cy="178" r="3.5" fill="#ffffff"/>
+</svg>
