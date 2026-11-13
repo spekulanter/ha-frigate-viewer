@@ -17,3 +17,7 @@ in as a read-only viewer. Not affiliated with the Frigate project.
 3. Add `card/frigate-ui-card.js` as a dashboard resource (JavaScript module).
 
 Details are in [frigate_viewer/DOCS.md](frigate_viewer/DOCS.md).
+
+The app icon uses the Frigate bird logo from
+[blakeblackshear/frigate](https://github.com/blakeblackshear/frigate)
+(`web/images/favicon.svg`, MIT license), recolored on a dark tile.
